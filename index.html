@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paradise Handball League Registration</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>Player Registration Form</h1>
+    <form id="registration-form">
+      <input type="email" placeholder="Email" required /><br />
+      <input type="text" placeholder="Full Name (As per document)" required /><br />
+      <input type="text" placeholder="Father's Name" required /><br />
+      <input type="text" placeholder="Mother's Name" required /><br />
+      <input type="date" placeholder="DOB" required /><br />
+      <input type="tel" placeholder="Phone/WhatsApp" required /><br />
+      <select required>
+        <option value="">Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select><br />
+      <input type="text" placeholder="District" required /><br />
+      <input type="text" placeholder="Aadhaar Number" required /><br />
+      <input type="number" placeholder="District Level Achievements" /><br />
+      <input type="number" placeholder="State Level Achievements" /><br />
+      <input type="number" placeholder="National Level Achievements" /><br />
+      <input type="text" placeholder="Player Position" required /><br />
+      <label>Passport Size Photo: <input type="file" required /></label><br />
+      <input type="number" placeholder="Base Price (₹50 - ₹200)" min="50" max="200" required /><br />
+      <button type="button" onclick="payNow()">Pay ₹100 & Submit</button>
+    </form>
+  </div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
