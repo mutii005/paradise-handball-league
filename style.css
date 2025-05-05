@@ -1,42 +1,60 @@
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
+
 .container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   width: 90%;
   max-width: 600px;
-  margin: auto;
-  background: #fff;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 40px;
-  border-radius: 10px;
 }
+
 .logo {
-  width: 100px;
+  max-width: 100px;
   display: block;
-  margin: auto;
+  margin: 0 auto 20px;
 }
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.description {
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 input, select {
-  width: 100%;
+  margin-bottom: 15px;
   padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
-button {
-  background: #007bff;
+
+input[type="submit"] {
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 12px;
-  width: 100%;
-  font-size: 16px;
   cursor: pointer;
-  border-radius: 5px;
 }
-button:hover {
-  background: #0056b3;
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
 }

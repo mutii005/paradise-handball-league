@@ -4,38 +4,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paradise Handball League Registration</title>
+  <title>Paradise Handball League – Player Registration 2025</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h1>Player Registration Form</h1>
-    <form id="registration-form">
-      <input type="email" placeholder="Email" required /><br />
-      <input type="text" placeholder="Full Name (As per document)" required /><br />
-      <input type="text" placeholder="Father's Name" required /><br />
-      <input type="text" placeholder="Mother's Name" required /><br />
-      <input type="date" placeholder="DOB" required /><br />
-      <input type="tel" placeholder="Phone/WhatsApp" required /><br />
-      <select required>
-        <option value="">Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select><br />
-      <input type="text" placeholder="District" required /><br />
-      <input type="text" placeholder="Aadhaar Number" required /><br />
-      <input type="number" placeholder="District Level Achievements" /><br />
-      <input type="number" placeholder="State Level Achievements" /><br />
-      <input type="number" placeholder="National Level Achievements" /><br />
-      <input type="text" placeholder="Player Position" required /><br />
-      <label>Passport Size Photo: <input type="file" required /></label><br />
-      <input type="number" placeholder="Base Price (₹50 - ₹200)" min="50" max="200" required /><br />
-      <button type="button" onclick="payNow()">Pay ₹100 & Submit</button>
+    <img src="logo.png" alt="Paradise Handball League Logo" class="logo">
+    <h1>Paradise Handball League – Player Registration 2025</h1>
+    <p class="description">
+      Welcome to the official player registration form. Please fill out this form carefully and proceed to payment via Razorpay.
+    </p>
+    <form action="register.php" method="POST" enctype="multipart/form-data">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="text" name="name" placeholder="Name (As per document)" required />
+      <input type="text" name="father_name" placeholder="Father's Name" required />
+      <input type="text" name="mother_name" placeholder="Mother's Name" required />
+      <input type="date" name="dob" placeholder="Date of Birth" required />
+      <input type="text" name="phone" placeholder="Phone Number / WhatsApp" required />
+      <select name="gender" required>
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="text" name="district" placeholder="District" required />
+      <input type="text" name="aadhaar" placeholder="Aadhaar Number" required />
+      <input type="number" name="district_achievements" placeholder="District Achievements" required />
+      <input type="number" name="state_achievements" placeholder="State Achievements" required />
+      <input type="number" name="national_achievements" placeholder="National Achievements" required />
+      <input type="text" name="position" placeholder="Player Position" required />
+      <input type="file" name="photo" accept="image/*" required />
+      <input type="number" name="price" placeholder="Basic Price (₹50 to ₹200)" min="50" max="200" required />
+      <input type="submit" value="Proceed to Payment" />
     </form>
   </div>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>
