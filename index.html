@@ -1,42 +1,776 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paradise Handball League – Player Registration 2025</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradise Handball League - Player Registration 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Ensures child elements respect border radius */
+        }
+        .form-header {
+            background: linear-gradient(135deg, #4a90e2, #50e3c2); /* Blue-green gradient */
+            color: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        .form-header img {
+            max-width: 150px; /* Adjust logo size */
+            margin-bottom: 1rem;
+            display: inline-block; /* Center the logo */
+        }
+        .form-step {
+            padding: 2rem;
+            display: none; /* Hide steps by default */
+        }
+        .form-step.active {
+            display: block; /* Show active step */
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-top: 0.25rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #374151;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #357abd;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        .error-message {
+            color: #ef4444; /* Red */
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .terms-section {
+            background-color: #f9fafb; /* Lighter gray for terms */
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .terms-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+        }
+        .terms-section ul {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            color: #4b5563;
+        }
+        .terms-section li {
+            margin-bottom: 0.5rem;
+        }
+        .contact-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+         /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 1rem;
+            }
+            .form-step {
+                padding: 1.5rem;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 0.5rem; /* Space between buttons on mobile */
+            }
+            .button-group .btn {
+                width: 100%; /* Full width buttons on mobile */
+            }
+        }
+        @media (max-width: 480px) {
+            .form-header {
+                padding: 1rem 1.5rem;
+            }
+             .form-header h1 {
+                font-size: 1.25rem;
+            }
+            .form-step {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" alt="Paradise Handball League Logo" class="logo">
-    <h1>Paradise Handball League – Player Registration 2025</h1>
-    <p class="description">
-      Welcome to the official player registration form. Please fill out this form carefully and proceed to payment via Razorpay.
-    </p>
-    <form action="register.php" method="POST" enctype="multipart/form-data">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="text" name="name" placeholder="Name (As per document)" required />
-      <input type="text" name="father_name" placeholder="Father's Name" required />
-      <input type="text" name="mother_name" placeholder="Mother's Name" required />
-      <input type="date" name="dob" placeholder="Date of Birth" required />
-      <input type="text" name="phone" placeholder="Phone Number / WhatsApp" required />
-      <select name="gender" required>
-        <option value="">Select Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
-      <input type="text" name="district" placeholder="District" required />
-      <input type="text" name="aadhaar" placeholder="Aadhaar Number" required />
-      <input type="number" name="district_achievements" placeholder="District Achievements" required />
-      <input type="number" name="state_achievements" placeholder="State Achievements" required />
-      <input type="number" name="national_achievements" placeholder="National Achievements" required />
-      <input type="text" name="position" placeholder="Player Position" required />
-      <input type="file" name="photo" accept="image/*" required />
-      <input type="number" name="price" placeholder="Basic Price (₹50 to ₹200)" min="50" max="200" required />
-      <input type="submit" value="Proceed to Payment" />
-    </form>
-  </div>
+    <div class="form-container">
+        <div class="form-header">
+             <img src="images/logo.jpeg" alt="Paradise Handball League Logo" class="rounded">
+            <h1 class="text-2xl font-bold">Paradise Handball League – Player Registration 2025</h1>
+            <p class="mt-2 text-sm opacity-90">Welcome! Please read the terms and proceed to registration.</p>
+        </div>
+
+        <form id="registrationForm" enctype="multipart/form-data">
+            <div id="step-1" class="form-step active">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Player Registration Information</h2>
+                <p class="mb-4 text-gray-600">
+                    This form is for players who wish to enter the bidding process for team selection in the Paradise Handball League 2025.
+                    Please fill out the registration form carefully with accurate and complete information.
+                </p>
+                <div class="terms-section">
+                    <h3>Important Notes & Terms:</h3>
+                    <ul>
+                        <li>All fields in the registration form are compulsory unless marked optional.</li>
+                        <li>Registration requires a payment of ₹100 via Razorpay after form submission.</li>
+                        <li>Registration will only be confirmed after successful online payment.</li>
+                        <li>Forms without payment confirmation will be rejected.</li>
+                        <li>Payment is non-refundable under any circumstances.</li>
+                        <li>If a player is not selected by any team owner during the bidding process, the ₹100 registration fee will still not be refunded.</li>
+                        <li>Last date for player registration is <strong id="registrationEndDateText">10th May 2025</strong>. No entries will be accepted after this deadline.</li>
+                        <li>This form is specifically for the player bidding process in Paradise Handball League 2025.</li>
+                    </ul>
+                    <div class="contact-info mt-4">
+                        <strong>For Any Clarifications, Contact:</strong><br>
+                        9797219983 | 9596251338 | 7006453652
+                    </div>
+                </div>
+
+                <div id="registrationClosedMessage" class="hidden p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                    <span class="font-medium">Registration Closed!</span> The registration deadline (<span id="deadlineDateText">10th May 2025</span>) has passed. New registrations are no longer accepted.
+                </div>
+
+                <div class="button-group justify-end">
+                    <button type="button" id="nextButtonStep1" class="btn btn-primary">Proceed to Registration</button>
+                </div>
+            </div>
+
+            <div id="step-2" class="form-step">
+                <h2 class="text-xl font-semibold mb-6 text-gray-800">Player Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="email" class="form-label">Email <span class="text-red-500">*</span></label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <p class="error-message" id="error-email"></p>
+                    </div>
+                    <div>
+                        <label for="name" class="form-label">Name (As per document) <span class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                         <p class="error-message" id="error-name"></p>
+                    </div>
+                    <div>
+                        <label for="father_name" class="form-label">Father's Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="father_name" name="father_name" class="form-input" required>
+                         <p class="error-message" id="error-father_name"></p>
+                    </div>
+                    <div>
+                        <label for="mother_name" class="form-label">Mother's Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="mother_name" name="mother_name" class="form-input" required>
+                         <p class="error-message" id="error-mother_name"></p>
+                    </div>
+                    <div>
+                        <label for="dob" class="form-label">Date of Birth (DOB) <span class="text-red-500">*</span></label>
+                        <input type="date" id="dob" name="dob" class="form-input" required max="2015-01-01"> <p class="error-message" id="error-dob"></p>
+                    </div>
+                    <div>
+                        <label for="phone" class="form-label">Phone Number / WhatsApp <span class="text-red-500">*</span></label>
+                        <input type="tel" id="phone" name="phone" class="form-input" pattern="[6-9][0-9]{9}" title="Please enter a valid 10-digit Indian mobile number" required>
+                        <p class="error-message" id="error-phone"></p>
+                    </div>
+                    <div>
+                        <label for="gender" class="form-label">Gender <span class="text-red-500">*</span></label>
+                        <select id="gender" name="gender" class="form-select" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                         <p class="error-message" id="error-gender"></p>
+                    </div>
+                    <div>
+                        <label for="district" class="form-label">District <span class="text-red-500">*</span></label>
+                        <input type="text" id="district" name="district" class="form-input" required>
+                         <p class="error-message" id="error-district"></p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="aadhaar" class="form-label">Aadhaar Number <span class="text-red-500">*</span></label>
+                        <input type="text" id="aadhaar" name="aadhaar" class="form-input" pattern="\d{12}" title="Please enter a valid 12-digit Aadhaar number" required>
+                         <p class="error-message" id="error-aadhaar"></p>
+                    </div>
+
+                    <div class="md:col-span-2 mt-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Achievements</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="district_achievements" class="form-label">District <span class="text-red-500">*</span></label>
+                                <input type="text" id="district_achievements" name="district_achievements" class="form-input" placeholder="e.g., Gold Medal 2024" required>
+                                 <p class="error-message" id="error-district_achievements"></p>
+                            </div>
+                            <div>
+                                <label for="state_achievements" class="form-label">State <span class="text-red-500">*</span></label>
+                                <input type="text" id="state_achievements" name="state_achievements" class="form-input" placeholder="e.g., Participation 2023" required>
+                                 <p class="error-message" id="error-state_achievements"></p>
+                            </div>
+                            <div>
+                                <label for="national_achievements" class="form-label">National <span class="text-red-500">*</span></label>
+                                <input type="text" id="national_achievements" name="national_achievements" class="form-input" placeholder="e.g., Bronze Medal 2022" required>
+                                 <p class="error-message" id="error-national_achievements"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div>
+                        <label for="player_position" class="form-label">Player Position <span class="text-red-500">*</span></label>
+                        <input type="text" id="player_position" name="player_position" class="form-input" placeholder="e.g., Goalkeeper, Left Wing" required>
+                         <p class="error-message" id="error-player_position"></p>
+                    </div>
+
+                    <div>
+                        <label for="basic_price" class="form-label">Basic Price (₹50 - ₹200) <span class="text-red-500">*</span></label>
+                        <input type="number" id="basic_price" name="basic_price" class="form-input" min="50" max="200" step="10" placeholder="e.g., 100" required>
+                         <p class="error-message" id="error-basic_price"></p>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="passport_photo" class="form-label">Passport-size Photo <span class="text-red-500">*</span></label>
+                        <input type="file" id="passport_photo" name="passport_photo" class="form-input" accept="image/jpeg, image/png, image/jpg" required>
+                        <p class="text-xs text-gray-500 mt-1">Accepted formats: JPG, PNG, JPEG. Max size: 2MB.</p>
+                         <p class="error-message" id="error-passport_photo"></p>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" id="prevButtonStep2" class="btn btn-secondary">Back</button>
+                    <button type="button" id="submitAndPayButton" class="btn btn-primary">Submit & Proceed to Pay ₹100</button>
+                </div>
+                 <div id="formErrorMessage" class="mt-4 text-center text-red-600 font-medium hidden">
+                    Please fix the errors above before proceeding.
+                </div>
+            </div>
+
+            <div id="step-3" class="form-step text-center">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Processing Payment...</h2>
+                <div id="paymentSpinner" class="flex justify-center items-center my-8">
+                     <svg class="animate-spin h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <p id="paymentStatusMessage" class="text-gray-600">Please wait while we prepare your payment request.</p>
+                 <p id="paymentErrorMessage" class="text-red-600 font-medium mt-4 hidden"></p>
+                <button type="button" id="cancelPaymentButton" class="btn btn-secondary mt-6 hidden">Cancel and Edit Form</button>
+            </div>
+
+             <div id="step-4" class="form-step text-center">
+                 <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h2 class="text-2xl font-semibold mb-3 text-green-700">Registration Successful!</h2>
+                <p class="text-gray-700 mb-2">Thank you for registering for the Paradise Handball League 2025!</p>
+                <p class="text-gray-600 mb-4">Your registration details and payment confirmation have been received. You will receive a confirmation email shortly (please check your spam folder too).</p>
+                <p class="text-gray-600 text-sm">Payment ID: <span id="successPaymentId" class="font-mono"></span></p>
+                 <p class="text-gray-600 text-sm">Order ID: <span id="successOrderId" class="font-mono"></span></p>
+                 <div class="mt-6">
+                     <a href="index.html" class="text-blue-600 hover:underline">Register another player?</a> </div>
+            </div>
+
+             <div id="step-5" class="form-step text-center">
+                 <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h2 class="text-2xl font-semibold mb-3 text-red-700">Registration Failed</h2>
+                <p id="failureReason" class="text-gray-700 mb-4">Unfortunately, we couldn't complete your registration.</p>
+                <p class="text-gray-600 mb-6">This could be due to a payment issue or a technical problem. Please try again.</p>
+                 <div class="button-group justify-center">
+                    <button type="button" id="retryButton" class="btn btn-primary">Retry Registration</button>
+                 </div>
+                 <p class="text-gray-500 text-sm mt-4">If the problem persists, please contact support using the numbers on the first page.</p>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const REGISTRATION_END_DATE_STR = "2025-05-10T23:59:59"; // YYYY-MM-DDTHH:MM:SS
+        const REGISTRATION_FEE = 100; // Amount in INR
+        const CURRENCY = "INR";
+        // ============================================================
+        // IMPORTANT: REPLACE WITH YOUR ACTUAL RAZORPAY KEY ID
+        // ============================================================
+        const RAZORPAY_KEY_ID = "YOUR_TEST_OR_LIVE_KEY_ID";
+        // ============================================================
+        const COMPANY_NAME = "Paradise Handball League";
+        const COMPANY_LOGO_URL = "images/logo.jpeg"; // Path to your logo
+        const BACKEND_URL = "register.php"; // URL of your PHP backend script
+
+        // --- DOM Elements ---
+        const form = document.getElementById('registrationForm');
+        const steps = Array.from(document.querySelectorAll('.form-step'));
+        const nextButtonStep1 = document.getElementById('nextButtonStep1');
+        const prevButtonStep2 = document.getElementById('prevButtonStep2');
+        const submitAndPayButton = document.getElementById('submitAndPayButton');
+        const cancelPaymentButton = document.getElementById('cancelPaymentButton');
+        const retryButton = document.getElementById('retryButton');
+        const registrationClosedMessage = document.getElementById('registrationClosedMessage');
+        const formErrorMessage = document.getElementById('formErrorMessage');
+        const paymentStatusMessage = document.getElementById('paymentStatusMessage');
+        const paymentErrorMessage = document.getElementById('paymentErrorMessage');
+        const paymentSpinner = document.getElementById('paymentSpinner');
+        const successPaymentId = document.getElementById('successPaymentId');
+        const successOrderId = document.getElementById('successOrderId');
+        const failureReason = document.getElementById('failureReason');
+        const dobInput = document.getElementById('dob');
+
+        // Input fields for validation
+        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+
+        // --- State ---
+        let currentStep = 1;
+        let registrationOpen = true;
+        let razorpayOrderId = null; // To store the order ID from backend
+
+        // --- Functions ---
+
+        // Function to navigate between steps
+        function goToStep(stepNumber) {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === stepNumber);
+            });
+            currentStep = stepNumber;
+            window.scrollTo(0, 0); // Scroll to top on step change
+        }
+
+        // Function to check if registration is open
+        function checkRegistrationDeadline() {
+            // Use server time if possible, fallback to client time (less reliable)
+            const now = new Date();
+            const endDate = new Date(REGISTRATION_END_DATE_STR);
+            // Adjust end date to include the full day
+            endDate.setHours(23, 59, 59, 999);
+
+            const endDateText = endDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            // Update deadline text on the page
+            document.getElementById('registrationEndDateText').textContent = endDateText;
+            document.getElementById('deadlineDateText').textContent = endDateText;
+
+
+            if (now > endDate) {
+                registrationOpen = false;
+                registrationClosedMessage.classList.remove('hidden');
+                nextButtonStep1.disabled = true;
+                nextButtonStep1.classList.add('opacity-50', 'cursor-not-allowed');
+                 submitAndPayButton.disabled = true; // Also disable submit button if deadline passed
+                 submitAndPayButton.classList.add('opacity-50', 'cursor-not-allowed');
+                 console.log("Registration closed. Current time:", now, "End date:", endDate);
+            } else {
+                registrationOpen = true;
+                registrationClosedMessage.classList.add('hidden');
+                nextButtonStep1.disabled = false;
+                 nextButtonStep1.classList.remove('opacity-50', 'cursor-not-allowed');
+                 submitAndPayButton.disabled = false;
+                 submitAndPayButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                 console.log("Registration open. Current time:", now, "End date:", endDate);
+            }
+        }
+
+        // Simple Client-Side Validation
+        function validateInput(input) {
+            const errorElement = document.getElementById(`error-${input.name}`);
+            let isValid = true;
+            let errorMessage = '';
+
+            // Basic required check
+            if (input.required && !input.value.trim() && input.type !== 'file') {
+                isValid = false;
+                errorMessage = 'This field is required.';
+            }
+            // Required file check
+            else if (input.type === 'file' && input.required && input.files.length === 0) {
+                isValid = false;
+                errorMessage = 'This file is required.';
+            }
+            // Email format
+            else if (input.type === 'email' && input.value.trim() && !/^\S+@\S+\.\S+$/.test(input.value)) {
+                 isValid = false;
+                 errorMessage = 'Please enter a valid email address.';
+            }
+            // Phone number format (simple Indian format)
+            else if (input.type === 'tel' && input.pattern && input.value.trim() && !new RegExp(input.pattern).test(input.value)) {
+                 isValid = false;
+                 errorMessage = input.title || 'Please enter a valid phone number.';
+            }
+             // Aadhaar format
+            else if (input.name === 'aadhaar' && input.pattern && input.value.trim() && !new RegExp(input.pattern).test(input.value)) {
+                 isValid = false;
+                 errorMessage = input.title || 'Please enter a valid 12-digit Aadhaar number.';
+            }
+            // Basic price range
+            else if (input.name === 'basic_price' && input.value.trim()) {
+                const price = parseFloat(input.value);
+                if (isNaN(price) || price < 50 || price > 200) {
+                     isValid = false;
+                     errorMessage = 'Price must be between ₹50 and ₹200.';
+                }
+            }
+            // File type and size (basic check - more robust check needed on server)
+             else if (input.type === 'file' && input.files.length > 0) {
+                const file = input.files[0];
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (!allowedTypes.includes(file.type)) {
+                    isValid = false;
+                    errorMessage = 'Invalid file type. Only JPG, PNG, JPEG allowed.';
+                } else if (file.size > maxSize) {
+                     isValid = false;
+                     errorMessage = 'File size exceeds 2MB limit.';
+                }
+            }
+             // DOB check (ensure it's a past date)
+            else if (input.type === 'date' && input.value) {
+                const dobDate = new Date(input.value);
+                const today = new Date();
+                today.setHours(0,0,0,0); // Reset time part for comparison
+                if (dobDate >= today) {
+                    isValid = false;
+                    errorMessage = 'Date of Birth must be in the past.';
+                }
+                 // Optional: Add minimum age check if needed
+                 // const minAgeDate = new Date();
+                 // minAgeDate.setFullYear(minAgeDate.getFullYear() - 10); // Example: Must be at least 10 years old
+                 // if (dobDate > minAgeDate) {
+                 //     isValid = false;
+                 //     errorMessage = 'Player must be at least 10 years old.';
+                 // }
+            }
+
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+                 // Add/Remove red border
+                input.classList.toggle('border-red-500', !isValid && errorMessage !== ''); // Only add border if there's an error message
+                input.classList.toggle('border-d1d5db', isValid || errorMessage === ''); // Use default border if valid or no error message
+            }
+
+            return isValid;
+        }
+
+        function validateStep2() {
+            let isStepValid = true;
+            formErrorMessage.classList.add('hidden'); // Hide general error message initially
+
+            inputs.forEach(input => {
+                 // Only validate inputs within step 2
+                if (document.getElementById('step-2').contains(input)) {
+                    if (!validateInput(input)) {
+                        isStepValid = false;
+                    }
+                }
+            });
+
+             if (!isStepValid) {
+                formErrorMessage.classList.remove('hidden'); // Show general error message
+            }
+
+            return isStepValid;
+        }
+
+        // Function to initiate Razorpay Payment
+        async function initiatePayment() {
+            if (!validateStep2()) {
+                console.error("Form validation failed.");
+                 // Scroll to the first error
+                 const firstError = form.querySelector('.border-red-500');
+                 if (firstError) {
+                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                     firstError.focus();
+                 }
+                return; // Stop if validation fails
+            }
+
+            // Disable button to prevent double clicks
+            submitAndPayButton.disabled = true;
+            submitAndPayButton.textContent = 'Processing...';
+            submitAndPayButton.classList.add('opacity-75', 'cursor-wait');
+
+
+            goToStep(3); // Go to processing step
+            paymentStatusMessage.textContent = 'Validating details and creating payment order...';
+            paymentErrorMessage.classList.add('hidden');
+            paymentSpinner.classList.remove('hidden');
+            cancelPaymentButton.classList.add('hidden'); // Hide cancel initially
+
+            const formData = new FormData(form);
+            formData.append('action', 'create_order'); // Add action for backend routing
+            formData.append('amount', REGISTRATION_FEE * 100); // Amount in paise
+            formData.append('currency', CURRENCY);
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: formData
+                    // No 'Content-Type' header needed for FormData, browser sets it with boundary
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success && result.order_id) {
+                    razorpayOrderId = result.order_id; // Store the order ID
+                    paymentStatusMessage.textContent = 'Redirecting to secure payment gateway...';
+
+                    // Prepare Razorpay options
+                    const options = {
+                        key: RAZORPAY_KEY_ID,
+                        amount: result.amount, // Amount in paise from backend
+                        currency: result.currency,
+                        name: COMPANY_NAME,
+                        description: "Player Registration Fee",
+                        image: COMPANY_LOGO_URL,
+                        order_id: result.order_id,
+                        handler: async function (response) {
+                             // --- Payment Success Callback ---
+                            console.log("Payment successful:", response);
+                            paymentStatusMessage.textContent = 'Verifying payment... Please wait.';
+                            paymentSpinner.classList.remove('hidden');
+                             cancelPaymentButton.classList.add('hidden'); // Hide cancel during verification
+
+                            // Verify payment on the backend
+                            const verifyFormData = new FormData();
+                            verifyFormData.append('action', 'verify_payment');
+                            verifyFormData.append('razorpay_payment_id', response.razorpay_payment_id);
+                            verifyFormData.append('razorpay_order_id', response.razorpay_order_id);
+                            verifyFormData.append('razorpay_signature', response.razorpay_signature);
+                            // Include original form data for email sending upon verification
+                             for (let pair of formData.entries()) {
+                                // Avoid appending the action/amount/currency again
+                                if (!['action', 'amount', 'currency'].includes(pair[0])) {
+                                     // Don't send file object again, send filename instead
+                                     if (pair[0] === 'passport_photo' && pair[1] instanceof File) {
+                                        verifyFormData.append('passport_photo_filename', pair[1].name); // Send filename
+                                     } else if (!(pair[1] instanceof File)) { // Send other non-file data
+                                        verifyFormData.append(pair[0], pair[1]);
+                                     }
+                                }
+                            }
+
+                            try {
+                                const verifyResponse = await fetch(BACKEND_URL, {
+                                    method: 'POST',
+                                    body: verifyFormData
+                                });
+                                const verifyResult = await verifyResponse.json();
+
+                                if (verifyResponse.ok && verifyResult.success) {
+                                    console.log("Verification successful:", verifyResult);
+                                    // Display success message
+                                    successPaymentId.textContent = response.razorpay_payment_id;
+                                    successOrderId.textContent = response.razorpay_order_id;
+                                    goToStep(4); // Go to success step
+                                } else {
+                                    console.error("Verification failed:", verifyResult);
+                                    failureReason.textContent = verifyResult.message || "Payment verification failed. Please contact support if amount was deducted.";
+                                    goToStep(5); // Go to failure step
+                                }
+                            } catch (verifyError) {
+                                console.error("Error verifying payment:", verifyError);
+                                failureReason.textContent = "An error occurred during payment verification. Please contact support if amount was deducted.";
+                                goToStep(5); // Go to failure step
+                            }
+                        },
+                        prefill: {
+                            name: document.getElementById('name').value,
+                            email: document.getElementById('email').value,
+                            contact: document.getElementById('phone').value
+                        },
+                        notes: {
+                            address: `District: ${document.getElementById('district').value}`, // Example note
+                            player_name: document.getElementById('name').value
+                        },
+                        theme: {
+                            color: "#4a90e2" // Match theme color
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                console.log('Razorpay checkout modal closed');
+                                // Optionally handle modal close without payment
+                                paymentStatusMessage.textContent = 'Payment Cancelled / Incomplete';
+                                paymentErrorMessage.textContent = 'You closed or cancelled the payment process. Please try again if you wish to register.';
+                                paymentErrorMessage.classList.remove('hidden');
+                                paymentSpinner.classList.add('hidden');
+                                cancelPaymentButton.textContent = 'Edit Form Details';
+                                cancelPaymentButton.classList.remove('hidden');
+                                // Re-enable submit button
+                                submitAndPayButton.disabled = false;
+                                submitAndPayButton.textContent = 'Submit & Proceed to Pay ₹100';
+                                submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
+                            }
+                        }
+                    };
+
+                    // Open Razorpay Checkout
+                    const rzp = new Razorpay(options);
+
+                     // Handle payment failure events from Razorpay
+                     rzp.on('payment.failed', function (response){
+                        console.error("Razorpay payment failed event:", response);
+                        failureReason.textContent = `Payment Failed: ${response.error.description || 'Unknown Error'} (Code: ${response.error.code || 'N/A'}). Order ID: ${response.error?.metadata?.order_id || 'N/A'}. Payment ID: ${response.error?.metadata?.payment_id || 'N/A'}. Please contact support if amount was deducted.`;
+                        goToStep(5);
+                    });
+
+                    rzp.open();
+
+
+                } else {
+                    // Handle error from backend (e.g., validation failed server-side, order creation failed)
+                    console.error("Error creating Razorpay order:", result);
+                    paymentStatusMessage.textContent = 'Failed to Create Payment Order';
+                    paymentErrorMessage.textContent = result.message || 'Could not initiate payment. Please check your details or try again later.';
+                    paymentErrorMessage.classList.remove('hidden');
+                    paymentSpinner.classList.add('hidden');
+                    cancelPaymentButton.textContent = 'Edit Form Details';
+                    cancelPaymentButton.classList.remove('hidden');
+                    // Re-enable submit button
+                    submitAndPayButton.disabled = false;
+                    submitAndPayButton.textContent = 'Submit & Proceed to Pay ₹100';
+                    submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
+                }
+
+            } catch (error) {
+                console.error("Error fetching order details:", error);
+                 paymentStatusMessage.textContent = 'Network Error';
+                 paymentErrorMessage.textContent = 'Could not connect to the server to initiate payment. Please check your internet connection and try again.';
+                 paymentErrorMessage.classList.remove('hidden');
+                 paymentSpinner.classList.add('hidden');
+                 cancelPaymentButton.textContent = 'Edit Form Details';
+                 cancelPaymentButton.classList.remove('hidden');
+                 // Re-enable submit button
+                 submitAndPayButton.disabled = false;
+                 submitAndPayButton.textContent = 'Submit & Proceed to Pay ₹100';
+                 submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
+            }
+        }
+
+         // Function to set today's date as max for DOB input
+         function setMaxDobDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months start at 0!
+            let dd = today.getDate();
+
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+
+            const maxDate = yyyy + '-' + mm + '-' + dd;
+            dobInput.setAttribute("max", maxDate);
+         }
+
+        // --- Event Listeners ---
+
+        // Navigation buttons
+        nextButtonStep1.addEventListener('click', () => {
+            if (registrationOpen) {
+                goToStep(2);
+            }
+        });
+
+        prevButtonStep2.addEventListener('click', () => {
+            goToStep(1);
+        });
+
+        // Submit and Pay Button
+        submitAndPayButton.addEventListener('click', () => {
+             if (registrationOpen) {
+                initiatePayment();
+            } else {
+                 alert("Registration is closed.");
+            }
+        });
+
+        // Cancel payment / Edit form
+         cancelPaymentButton.addEventListener('click', () => {
+             goToStep(2); // Go back to the form editing step
+        });
+
+        // Retry button on failure page
+        retryButton.addEventListener('click', () => {
+            razorpayOrderId = null; // Reset order ID
+            // Reset the form visually? Optional. Might be better to start fresh.
+            // form.reset(); // Uncomment to clear the form on retry
+            goToStep(1); // Start over from the beginning
+        });
+
+        // Real-time validation on input change/blur
+        inputs.forEach(input => {
+            // Use 'input' for immediate feedback, 'blur' might be less intrusive
+            input.addEventListener('input', () => validateInput(input));
+            // Validate on blur as well, especially after user finishes typing
+            input.addEventListener('blur', () => validateInput(input));
+
+             // Special handling for file input change
+            if (input.type === 'file') {
+                input.addEventListener('change', () => validateInput(input));
+            }
+             // Ensure select dropdowns are validated on change
+             if (input.tagName === 'SELECT') {
+                input.addEventListener('change', () => validateInput(input));
+            }
+        });
+
+        // --- Initialization ---
+        setMaxDobDate(); // Set max date for DOB input
+        checkRegistrationDeadline(); // Check deadline on page load
+        goToStep(1); // Ensure the first step is active initially
+
+    </script>
 </body>
 </html>
