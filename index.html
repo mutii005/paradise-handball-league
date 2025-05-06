@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paradise Handball League - Player Registration 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,6 +32,11 @@
         .terms-section ul { list-style-type: decimal; margin-left: 1.5rem; color: #4b5563; }
         .terms-section li { margin-bottom: 0.5rem; }
         .contact-info { margin-top: 1rem; font-size: 0.9rem; color: #4b5563; }
+        .payment-instructions { background-color: #fffbeb; border: 1px solid #fef3c7; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+        .payment-instructions strong { color: #b45309; }
+        /* Removed QR code container styles */
+        /* .qr-code-container { text-align: center; margin-bottom: 1rem; }
+        .qr-code-container img { max-width: 200px; height: auto; margin: 0 auto; border: 1px solid #eee; padding: 5px; border-radius: 8px; } */
         /* Responsive Design */
         @media (max-width: 768px) { .form-container { margin: 1rem; } .form-step { padding: 1.5rem; } .button-group { flex-direction: column; gap: 0.5rem; } .button-group .btn { width: 100%; } }
         @media (max-width: 480px) { .form-header { padding: 1rem 1.5rem; } .form-header h1 { font-size: 1.25rem; } .form-step { padding: 1rem; } }
@@ -41,12 +45,12 @@
 <body>
     <div class="form-container">
         <div class="form-header">
-             <img src="https://i.ibb.co/d0hJqjHW/Whats-App-Image-2025-05-05-at-4-56-40-PM.jpg" alt="Paradise Handball League Logo" class="rounded">
+             <img src="images/logo.jpeg" alt="Paradise Handball League Logo" class="rounded" onerror="this.style.display='none'; console.error('Logo not found at images/logo.jpeg')">
             <h1 class="text-2xl font-bold">Paradise Handball League – Player Registration 2025</h1>
-            <p class="mt-2 text-sm opacity-90">Welcome! Please read the terms and proceed to registration.</p>
+            <p class="mt-2 text-sm opacity-90">Welcome! Please fill the form and follow payment instructions.</p>
         </div>
 
-        <form id="registrationForm" enctype="multipart/form-data" novalidate>
+        <form id="registrationForm" action="/api/register" method="POST" enctype="multipart/form-data" novalidate>
             <div id="step-1" class="form-step active">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800">Player Registration Information</h2>
                 <p class="mb-4 text-gray-600">
@@ -57,9 +61,9 @@
                     <h3>Important Notes & Terms:</h3>
                     <ul>
                         <li>All fields in the registration form are compulsory unless marked optional.</li>
-                        <li>Registration requires a payment of ₹100 via Razorpay after form submission.</li>
-                        <li>Registration will only be confirmed after successful online payment.</li>
-                        <li>Forms without payment confirmation will be rejected.</li>
+                        <li>Registration requires a payment of ₹100. Payment details are provided in the next step.</li>
+                        <li>A screenshot of the successful payment must be uploaded to complete registration.</li>
+                        <li>Registration will only be considered complete after manual verification of the payment screenshot by the admin.</li>
                         <li>Payment is non-refundable under any circumstances.</li>
                         <li>If a player is not selected by any team owner during the bidding process, the ₹100 registration fee will still not be refunded.</li>
                         <li>Last date for player registration is <strong id="registrationEndDateText">10th May 2025</strong>. No entries will be accepted after this deadline.</li>
@@ -76,7 +80,7 @@
                 </div>
 
                 <div class="button-group justify-end">
-                    <button type="button" id="nextButtonStep1" class="btn btn-primary">Proceed to Registration</button>
+                    <button type="button" id="nextButtonStep1" class="btn btn-primary">Fill Registration Form</button>
                 </div>
             </div>
 
@@ -172,94 +176,105 @@
                     </div>
                 </div>
 
-                <div class="button-group mt-8"> <button type="button" id="prevButtonStep2" class="btn btn-secondary">Back</button>
-                    <button type="button" id="submitAndPayButton" class="btn btn-primary">Submit & Proceed to Pay ₹100</button>
-                </div>
-                 <div id="formErrorMessage" class="mt-4 text-center text-red-600 font-medium hidden">
+                 <div id="formErrorMessageStep2" class="mt-4 text-center text-red-600 font-medium hidden">
                     Please fix the errors above before proceeding.
                 </div>
-            </div>
 
-            <div id="step-3" class="form-step text-center">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">Processing Payment...</h2>
-                <div id="paymentSpinner" class="flex justify-center items-center my-8">
-                     <svg class="animate-spin h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                <div class="button-group mt-8">
+                    <button type="button" id="prevButtonStep2" class="btn btn-secondary">Back</button>
+                    <button type="button" id="nextButtonStep2" class="btn btn-primary">Proceed to Payment Step</button>
                 </div>
-                <p id="paymentStatusMessage" class="text-gray-600">Please wait while we prepare your payment request.</p>
-                 <p id="paymentErrorMessage" class="text-red-600 font-medium mt-4 hidden"></p>
-                <button type="button" id="cancelPaymentButton" class="btn btn-secondary mt-6 hidden">Cancel and Edit Form</button>
             </div>
 
-             <div id="step-4" class="form-step text-center">
-                 <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h2 class="text-2xl font-semibold mb-3 text-green-700">Registration Successful!</h2>
-                <p class="text-gray-700 mb-2">Thank you for registering for the Paradise Handball League 2025!</p>
-                <p class="text-gray-600 mb-4">Your registration details and payment confirmation have been received. Admin has been notified.</p>
-                <p class="text-gray-600 text-sm">Payment ID: <span id="successPaymentId" class="font-mono"></span></p>
-                 <p class="text-gray-600 text-sm">Order ID: <span id="successOrderId" class="font-mono"></span></p>
-                 <div class="mt-6">
-                     <a href="index.html" class="text-blue-600 hover:underline">Register another player?</a> </div>
-            </div>
+            <div id="step-3" class="form-step">
+                 <h2 class="text-xl font-semibold mb-4 text-gray-800">Payment Instructions (₹100)</h2>
 
-             <div id="step-5" class="form-step text-center">
-                 <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h2 class="text-2xl font-semibold mb-3 text-red-700">Registration Failed</h2>
-                <p id="failureReason" class="text-gray-700 mb-4">Unfortunately, we couldn't complete your registration.</p>
-                <p class="text-gray-600 mb-6">This could be due to a payment issue or a technical problem. Please try again.</p>
-                 <div class="button-group justify-center">
-                    <button type="button" id="retryButton" class="btn btn-primary">Retry Registration</button>
+                 <div class="payment-instructions space-y-6">
+                     <p class="mb-3">Please pay the registration fee of <strong>₹100</strong> using the details below.</p>
+
+                     <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                         <h3 class="text-lg font-semibold text-blue-700 mb-3">Bank Transfer Details</h3>
+                         <div class="space-y-3 text-gray-700">
+                             <div>
+                                 <p class="font-medium">Account Name:</p>
+                                 <p class="ml-2">Ghulam Mohi Ud Din Zargar</p>
+                             </div>
+                             <div>
+                                 <p class="font-medium">Account Number:</p>
+                                 <p class="ml-2 font-mono text-lg text-blue-800">0132040100016555</p>
+                             </div>
+                             <div>
+                                 <p class="font-medium">IFSC Code:</p>
+                                 <p class="ml-2 font-mono text-lg text-blue-800">JAKA0KREERI</p>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                          <h3 class="text-lg font-semibold text-green-700 mb-3">Mobile Payment Details (MPAY JKBANK)</h3>
+                          <div class="space-y-3 text-gray-700">
+                             <div>
+                                 <p class="font-medium">Mobile Number:</p>
+                                 <p class="ml-2 font-mono text-lg text-green-800">9797219983</p>
+                             </div>
+                          </div>
+                     </div>
                  </div>
-                 <p class="text-gray-500 text-sm mt-4">If the problem persists, please contact support using the numbers on the first page.</p>
+
+                 <div class="mt-6">
+                     <label for="payment_screenshot" class="form-label">Upload Payment Screenshot <span class="text-red-500">*</span></label>
+                     <input type="file" id="payment_screenshot" name="payment_screenshot" class="form-input file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" accept="image/jpeg, image/png, image/jpg" required>
+                     <p class="text-xs text-gray-500 mt-1">Upload the screenshot of your ₹100 payment. Max size: 2MB.</p>
+                     <p class="error-message" id="error-payment_screenshot"></p>
+                 </div>
+
+                 <div id="formErrorMessageStep3" class="mt-4 text-center text-red-600 font-medium hidden">
+                    Please upload the payment screenshot.
+                 </div>
+
+                 <div class="button-group mt-8">
+                    <button type="button" id="prevButtonStep3" class="btn btn-secondary">Back</button>
+                    <button type="submit" id="submitRegistrationButton" class="btn btn-primary">
+                         <span class="submit-text">Submit Registration</span>
+                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden submit-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                         <span class="submit-spinner hidden">Submitting...</span>
+                    </button>
+                </div>
             </div>
 
-        </form>
+            </form>
     </div>
 
     <script>
         // --- Configuration ---
-        const REGISTRATION_END_DATE_STR = "2025-05-10T23:59:59"; // YYYY-MM-DDTHH:MM:SS
-        const REGISTRATION_FEE = 100; // Amount in INR
-        const CURRENCY = "INR";
-        // ============================================================
-        // Razorpay Key ID (Test or Live)
-        // ============================================================
-        const RAZORPAY_KEY_ID = "rzp_test_s8NLbkJf0TGPMy"; // Your Test Key ID
-        // ============================================================
-        // FULL URL of your register.php script on the PHP host
-        // ============================================================
-        const BACKEND_URL = "http://paradise-handball-league.infy.uk/register.php"; // Updated URL
-        // ============================================================
-        const COMPANY_NAME = "Paradise Handball League";
-        const COMPANY_LOGO_URL = "https://i.ibb.co/d0hJqjHW/Whats-App-Image-2025-05-05-at-4-56-40-PM.jpg"; // Your logo URL
+        const REGISTRATION_END_DATE_STR = "2025-05-10T23:59:59"; //YYYY-MM-DDTHH:MM:SS
 
         // --- DOM Elements ---
         const form = document.getElementById('registrationForm');
         const steps = Array.from(document.querySelectorAll('.form-step'));
         const nextButtonStep1 = document.getElementById('nextButtonStep1');
         const prevButtonStep2 = document.getElementById('prevButtonStep2');
-        const submitAndPayButton = document.getElementById('submitAndPayButton');
-        const cancelPaymentButton = document.getElementById('cancelPaymentButton');
-        const retryButton = document.getElementById('retryButton');
+        const nextButtonStep2 = document.getElementById('nextButtonStep2');
+        const prevButtonStep3 = document.getElementById('prevButtonStep3');
+        const submitRegistrationButton = document.getElementById('submitRegistrationButton');
+        const submitText = submitRegistrationButton.querySelector('.submit-text');
+        const submitSpinner = submitRegistrationButton.querySelectorAll('.submit-spinner'); // Select all spinners
         const registrationClosedMessage = document.getElementById('registrationClosedMessage');
-        const formErrorMessage = document.getElementById('formErrorMessage');
-        const paymentStatusMessage = document.getElementById('paymentStatusMessage');
-        const paymentErrorMessage = document.getElementById('paymentErrorMessage');
-        const paymentSpinner = document.getElementById('paymentSpinner');
-        const successPaymentId = document.getElementById('successPaymentId');
-        const successOrderId = document.getElementById('successOrderId');
-        const failureReason = document.getElementById('failureReason');
+        const formErrorMessageStep2 = document.getElementById('formErrorMessageStep2');
+        const formErrorMessageStep3 = document.getElementById('formErrorMessageStep3');
         const dobInput = document.getElementById('dob');
 
         // Input fields for validation
-        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        const allInputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        const step2Inputs = document.getElementById('step-2').querySelectorAll('input[required], select[required], textarea[required]');
+        const step3Inputs = document.getElementById('step-3').querySelectorAll('input[required]'); // Only screenshot input in step 3
 
         // --- State ---
         let currentStep = 1;
         let registrationOpen = true;
-        let razorpayOrderId = null; // To store the order ID from backend
 
         // --- Functions ---
 
@@ -286,17 +301,22 @@
             if (now > endDate) {
                 registrationOpen = false;
                 registrationClosedMessage.classList.remove('hidden');
+                // Disable all navigation/submit buttons if closed
                 nextButtonStep1.disabled = true;
                 nextButtonStep1.classList.add('opacity-50', 'cursor-not-allowed');
-                 submitAndPayButton.disabled = true;
-                 submitAndPayButton.classList.add('opacity-50', 'cursor-not-allowed');
+                nextButtonStep2.disabled = true;
+                nextButtonStep2.classList.add('opacity-50', 'cursor-not-allowed');
+                submitRegistrationButton.disabled = true;
+                submitRegistrationButton.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
                 registrationOpen = true;
                 registrationClosedMessage.classList.add('hidden');
                 nextButtonStep1.disabled = false;
-                 nextButtonStep1.classList.remove('opacity-50', 'cursor-not-allowed');
-                 submitAndPayButton.disabled = false;
-                 submitAndPayButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextButtonStep1.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextButtonStep2.disabled = false;
+                nextButtonStep2.classList.remove('opacity-50', 'cursor-not-allowed');
+                submitRegistrationButton.disabled = false;
+                submitRegistrationButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
 
@@ -305,34 +325,40 @@
             const errorElement = document.getElementById(`error-${input.name}`);
             let isValid = true;
             let errorMessage = '';
-            const value = input.type === 'file' ? input.value : input.value.trim();
+            const value = input.type === 'file' ? input.value : input.value.trim(); // Don't trim file input value
 
-            if (input.required && (input.type === 'file' ? input.files.length === 0 : value === '')) {
+            // Required check (handle file inputs separately)
+            if (input.required && input.type !== 'file' && value === '') {
                 isValid = false; errorMessage = 'This field is required.';
-            } else if (input.type === 'email' && value !== '' && !/^\S+@\S+\.\S+$/.test(value)) {
-                 isValid = false; errorMessage = 'Please enter a valid email address.';
-            } else if (input.type === 'tel' && input.pattern && value !== '' && !new RegExp(input.pattern).test(value)) {
-                 isValid = false; errorMessage = input.title || 'Please enter a valid phone number.';
-            } else if (input.name === 'aadhaar' && input.pattern && value !== '' && !new RegExp(input.pattern).test(value)) {
-                 isValid = false; errorMessage = input.title || 'Please enter a valid 12-digit Aadhaar number.';
-            } else if (input.name === 'basic_price' && value !== '') {
-                const price = parseFloat(value);
-                 // Check range and steps of 10
-                if (isNaN(price) || price < 50 || price > 200 || (price % 10 !== 0)) {
-                     isValid = false; errorMessage = 'Price must be between ₹50 and ₹200 (in steps of 10).';
+            } else if (input.required && input.type === 'file' && input.files.length === 0) {
+                isValid = false; errorMessage = 'This file is required.';
+            }
+            // Other validations only if field is not empty OR if it's a required file
+            else if (value !== '' || (input.required && input.type === 'file')) {
+                if (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(value)) {
+                    isValid = false; errorMessage = 'Please enter a valid email address.';
+                } else if (input.type === 'tel' && input.pattern && !new RegExp(input.pattern).test(value)) {
+                    isValid = false; errorMessage = input.title || 'Please enter a valid phone number.';
+                } else if (input.name === 'aadhaar' && input.pattern && !new RegExp(input.pattern).test(value)) {
+                    isValid = false; errorMessage = input.title || 'Please enter a valid 12-digit Aadhaar number.';
+                } else if (input.name === 'basic_price') {
+                    const price = parseFloat(value);
+                    if (isNaN(price) || price < 50 || price > 200 || (price % 10 !== 0)) {
+                        isValid = false; errorMessage = 'Price must be between ₹50 and ₹200 (in steps of 10).';
+                    }
+                } else if (input.type === 'file' && input.files.length > 0) {
+                    const file = input.files[0];
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                    const maxSize = 2 * 1024 * 1024; // 2MB
+                    if (!allowedTypes.includes(file.type)) { isValid = false; errorMessage = `Invalid file type (${file.type.split('/')[1]}). Only JPG, PNG allowed.`; }
+                    else if (file.size > maxSize) { isValid = false; errorMessage = `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds 2MB limit.`; }
+                } else if (input.type === 'date') {
+                    try {
+                        const dobDate = new Date(value);
+                        const today = new Date(); today.setHours(0,0,0,0);
+                        if (isNaN(dobDate.getTime()) || dobDate >= today) { isValid = false; errorMessage = 'Date of Birth must be a valid date in the past.'; }
+                    } catch (e) { isValid = false; errorMessage = 'Invalid Date of Birth format.'; }
                 }
-            } else if (input.type === 'file' && input.files.length > 0) {
-                const file = input.files[0];
-                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                const maxSize = 2 * 1024 * 1024; // 2MB
-                if (!allowedTypes.includes(file.type)) { isValid = false; errorMessage = 'Invalid file type. Only JPG, PNG, JPEG allowed.'; }
-                else if (file.size > maxSize) { isValid = false; errorMessage = 'File size exceeds 2MB limit.'; }
-            } else if (input.type === 'date' && value !== '') {
-                try {
-                    const dobDate = new Date(value);
-                    const today = new Date(); today.setHours(0,0,0,0);
-                    if (isNaN(dobDate.getTime()) || dobDate >= today) { isValid = false; errorMessage = 'Date of Birth must be a valid date in the past.'; }
-                } catch (e) { isValid = false; errorMessage = 'Invalid Date of Birth format.'; }
             }
 
             if (errorElement) {
@@ -343,210 +369,107 @@
             return isValid;
         }
 
-        // Validate all fields in Step 2
-        function validateStep2() {
+        // Validate all required fields within a specific step
+        function validateStep(stepInputs, errorMsgElement) {
             let isStepValid = true;
-            formErrorMessage.classList.add('hidden');
-            inputs.forEach(input => {
-                if (document.getElementById('step-2').contains(input)) { if (!validateInput(input)) isStepValid = false; }
+            errorMsgElement.classList.add('hidden'); // Hide general error first
+            stepInputs.forEach(input => {
+                if (!validateInput(input)) {
+                    isStepValid = false;
+                }
             });
              if (!isStepValid) {
-                formErrorMessage.classList.remove('hidden');
-                 const firstErrorField = form.querySelector('#step-2 .border-red-500');
-                 if (firstErrorField) { firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' }); firstErrorField.focus({ preventScroll: true }); }
+                errorMsgElement.classList.remove('hidden'); // Show general error if any field failed
+                 const firstErrorField = errorMsgElement.closest('.form-step').querySelector('.border-red-500');
+                 if (firstErrorField) {
+                     firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                     firstErrorField.focus({ preventScroll: true });
+                 }
             }
             return isStepValid;
         }
 
-        // Initiate Payment Process
-        async function initiatePayment() {
-            // Final check for placeholder URL
-            if (BACKEND_URL === "YOUR_PHP_BACKEND_URL_HERE") {
-                 alert("Configuration Error: Backend URL is not set. Please contact the administrator.");
+        // Function to show submitting state on button
+        function showSubmittingState(isSubmitting) {
+             submitText.classList.toggle('hidden', isSubmitting);
+             // Toggle hidden class on all spinner elements
+             submitSpinner.forEach(spinner => spinner.classList.toggle('hidden', !isSubmitting));
+             submitRegistrationButton.disabled = isSubmitting;
+             submitRegistrationButton.classList.toggle('opacity-75', isSubmitting);
+             submitRegistrationButton.classList.toggle('cursor-wait', isSubmitting);
+        }
+
+        // --- Handle Form Submission with Fetch API (for Vercel Serverless Function) ---
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            if (!registrationOpen) {
+                 alert("Registration is closed."); // Consider replacing alert with a modal or message box
                  return;
             }
-            if (!validateStep2()) { console.error("Form validation failed."); return; }
 
-            submitAndPayButton.disabled = true;
-            submitAndPayButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...`;
-            submitAndPayButton.classList.add('opacity-75', 'cursor-wait');
+            // Validate Step 3 (only the screenshot input) before allowing submission
+            if (!validateStep(step3Inputs, formErrorMessageStep3)) {
+                return; // Stop if validation fails
+            }
 
-            goToStep(3);
-            paymentStatusMessage.textContent = 'Validating details and creating payment order...';
-            paymentErrorMessage.classList.add('hidden');
-            paymentSpinner.classList.remove('hidden');
-            cancelPaymentButton.classList.add('hidden');
+            showSubmittingState(true); // Show submitting state
 
-            const formData = new FormData(form);
-            formData.append('action', 'create_order');
-            formData.append('amount', REGISTRATION_FEE * 100);
-            formData.append('currency', CURRENCY);
+            const formData = new FormData(form); // Get form data including files
 
             try {
-                const response = await fetch(BACKEND_URL, { method: 'POST', body: formData });
+                // Send data to the Vercel Serverless Function endpoint
+                // The endpoint is defined in the form's action attribute: /api/register
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData // FormData handles multipart/form-data
+                });
 
-                if (!response.ok) {
-                     let errorText = `HTTP error! Status: ${response.status} ${response.statusText}`;
-                     try { const errorData = await response.json(); errorText = errorData.message || JSON.stringify(errorData); }
-                     catch (e) { try { errorText = await response.text(); } catch (e) {} }
-                     throw new Error(errorText);
-                }
+                const result = await response.json(); // Assuming the serverless function returns JSON
 
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    const responseText = await response.text();
-                    console.error("Received non-JSON response:", responseText);
-                    throw new Error(`Received non-JSON response from server. Check PHP script output/errors. Response: ${responseText.substring(0, 200)}...`);
-                }
-
-                const result = await response.json();
-
-                if (result.success && result.order_id) {
-                    razorpayOrderId = result.order_id;
-                    paymentStatusMessage.textContent = 'Redirecting to secure payment gateway...';
-                    const options = {
-                        key: RAZORPAY_KEY_ID, amount: result.amount, currency: result.currency, name: COMPANY_NAME,
-                        description: "Player Registration Fee", image: COMPANY_LOGO_URL, order_id: result.order_id,
-                        handler: paymentVerificationHandler,
-                        prefill: { name: document.getElementById('name').value, email: document.getElementById('email').value, contact: document.getElementById('phone').value },
-                        notes: { address: `District: ${document.getElementById('district').value}`, player_name: document.getElementById('name').value },
-                        theme: { color: "#4a90e2" }, modal: { ondismiss: handleRazorpayDismiss }
-                    };
-                    const rzp = new Razorpay(options);
-                    rzp.on('payment.failed', handleRazorpayFailure);
-                    rzp.open();
+                if (response.ok) {
+                    // Handle success response from the serverless function
+                    alert("Registration Submitted Successfully! Admin will verify your details and payment."); // Consider replacing alert
+                    // Optionally redirect or reset form
+                    // window.location.href = '/success-page.html'; // Redirect to a success page
+                    form.reset(); // Reset the form after success
+                    goToStep(1); // Go back to the first step
                 } else {
-                    throw new Error(result.message || 'Failed to create Razorpay order. Backend reported an issue.');
+                    // Handle error response from the serverless function
+                    const errorMessage = result.message || 'An error occurred during registration.';
+                    alert("Registration Failed: " + errorMessage); // Consider replacing alert
+                    console.error("Registration Error:", result);
                 }
+
             } catch (error) {
-                console.error("Error during initiatePayment:", error);
-                 paymentStatusMessage.textContent = 'Error Initiating Payment';
-                 paymentErrorMessage.textContent = error.message || 'Could not connect to the server or process the request. Check internet and try again. Contact support if persistent.';
-                 paymentErrorMessage.classList.remove('hidden');
-                 paymentSpinner.classList.add('hidden');
-                 cancelPaymentButton.textContent = 'Edit Form Details';
-                 cancelPaymentButton.classList.remove('hidden');
-                 submitAndPayButton.disabled = false;
-                 submitAndPayButton.innerHTML = 'Submit & Proceed to Pay ₹100';
-                 submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
-            }
-        }
-
-        // Handler for successful Razorpay payment attempt
-        async function paymentVerificationHandler(response) {
-            console.log("Razorpay handler response:", response);
-            paymentStatusMessage.textContent = 'Verifying payment... Please wait.';
-            paymentSpinner.classList.remove('hidden');
-            cancelPaymentButton.classList.add('hidden');
-
-            const verifyFormData = new FormData(form);
-            verifyFormData.append('action', 'verify_payment');
-            verifyFormData.append('razorpay_payment_id', response.razorpay_payment_id);
-            verifyFormData.append('razorpay_order_id', response.razorpay_order_id);
-            verifyFormData.append('razorpay_signature', response.razorpay_signature);
-            const photoInput = document.getElementById('passport_photo');
-            if (photoInput.files.length > 0) { verifyFormData.append('passport_photo_filename', photoInput.files[0].name); }
-            else { verifyFormData.append('passport_photo_filename', 'N/A'); }
-
-            try {
-                const verifyResponse = await fetch(BACKEND_URL, { method: 'POST', body: verifyFormData });
-
-                if (!verifyResponse.ok) {
-                     let errorText = `Verification request failed! Status: ${verifyResponse.status}`;
-                     try { const errorData = await verifyResponse.json(); errorText = errorData.message || JSON.stringify(errorData); } catch (e) { try { errorText = await verifyResponse.text(); } catch (e) {} }
-                     throw new Error(errorText);
-                }
-
-                const contentType = verifyResponse.headers.get("content-type");
-                 if (!contentType || !contentType.includes("application/json")) {
-                    const responseText = await verifyResponse.text();
-                    console.error("Received non-JSON verification response:", responseText);
-                    throw new Error(`Received non-JSON response from server during verification. Response: ${responseText.substring(0, 200)}...`);
-                }
-
-                const verifyResult = await verifyResponse.json();
-
-                if (verifyResult.success) {
-                    console.log("Verification successful:", verifyResult);
-                    successPaymentId.textContent = response.razorpay_payment_id;
-                    successOrderId.textContent = response.razorpay_order_id;
-                    goToStep(4);
-                } else {
-                    throw new Error(verifyResult.message || "Payment verification failed by the server.");
-                }
-            } catch (verifyError) {
-                console.error("Error verifying payment:", verifyError);
-                failureReason.textContent = verifyError.message || "An error occurred during payment verification. Contact support if amount was deducted.";
-                goToStep(5);
+                console.error('Submission Error:', error);
+                alert("An unexpected error occurred. Please try again."); // Consider replacing alert
             } finally {
-                 submitAndPayButton.disabled = false;
-                 submitAndPayButton.innerHTML = 'Submit & Proceed to Pay ₹100';
-                 submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
+                showSubmittingState(false); // Hide submitting state
             }
-        }
+        });
 
-        // Handler for Razorpay modal dismissal
-        function handleRazorpayDismiss() {
-             console.log('Razorpay checkout modal closed by user.');
-             paymentStatusMessage.textContent = 'Payment Cancelled / Incomplete';
-             paymentErrorMessage.textContent = 'You closed or cancelled the payment process. Please try again if you wish to register.';
-             paymentErrorMessage.classList.remove('hidden');
-             paymentSpinner.classList.add('hidden');
-             cancelPaymentButton.textContent = 'Edit Form Details';
-             cancelPaymentButton.classList.remove('hidden');
-             submitAndPayButton.disabled = false;
-             submitAndPayButton.innerHTML = 'Submit & Proceed to Pay ₹100';
-             submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
-        }
 
-        // Handler for Razorpay payment failure event
-        function handleRazorpayFailure(response) {
-            console.error("Razorpay payment.failed event:", response);
-            let message = 'Payment Failed.';
-            if (response.error) {
-                message += ` Reason: ${response.error.description || 'Unknown Error'}.`;
-                if (response.error.code) message += ` (Code: ${response.error.code})`;
-                if (response.error.metadata) {
-                     if(response.error.metadata.order_id) message += ` Order ID: ${response.error.metadata.order_id}.`;
-                     if(response.error.metadata.payment_id) message += ` Payment ID: ${response.error.metadata.payment_id}.`;
-                }
-            }
-            message += ' Please contact support if amount was deducted.';
-            failureReason.textContent = message;
-            goToStep(5);
-             submitAndPayButton.disabled = false;
-             submitAndPayButton.innerHTML = 'Submit & Proceed to Pay ₹100';
-             submitAndPayButton.classList.remove('opacity-75', 'cursor-wait');
-        }
-
-         // Function to set max date for DOB input (cannot be today)
-         function setMaxDobDate() {
-            const today = new Date();
-            today.setDate(today.getDate() - 1); // Set max date to yesterday
-            const maxDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-            dobInput.setAttribute("max", maxDate);
-         }
-
-        // --- Event Listeners ---
-        nextButtonStep1.addEventListener('click', () => { if (registrationOpen) goToStep(2); });
-        prevButtonStep2.addEventListener('click', () => goToStep(1));
-        submitAndPayButton.addEventListener('click', () => { if (registrationOpen) initiatePayment(); else alert("Registration is closed."); });
-        cancelPaymentButton.addEventListener('click', () => goToStep(2));
-        retryButton.addEventListener('click', () => { razorpayOrderId = null; goToStep(1); });
-
-        // Real-time validation
-        inputs.forEach(input => {
-            input.addEventListener('input', () => validateInput(input));
-            input.addEventListener('blur', () => validateInput(input));
+        // Real-time validation for all inputs
+        allInputs.forEach(input => {
+            input.addEventListener('input', () => validateInput(input)); // Validate as user types/changes
+            input.addEventListener('blur', () => validateInput(input)); // Validate when user leaves field
             if (input.type === 'file' || input.tagName === 'SELECT') {
-                input.addEventListener('change', () => validateInput(input));
+                input.addEventListener('change', () => validateInput(input)); // Ensure validation on file/select change
             }
         });
 
         // --- Initialization ---
+        function setMaxDobDate() {
+            const today = new Date();
+            today.setDate(today.getDate() - 1); // Set max date to yesterday
+            const maxDate = today.toISOString().split('T')[0]; // Format asYYYY-MM-DD
+            dobInput.setAttribute("max", maxDate);
+         }
+
         setMaxDobDate();
         checkRegistrationDeadline();
-        goToStep(1);
+        goToStep(1); // Start at Step 1
 
     </script>
 </body>
