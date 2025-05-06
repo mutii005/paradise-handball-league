@@ -293,6 +293,9 @@
             const endDate = new Date(REGISTRATION_END_DATE_STR);
             endDate.setHours(23, 59, 59, 999); // Include the full day
 
+            console.log("Current Date/Time:", now); // Log current date
+            console.log("Registration End Date:", endDate); // Log end date
+
             const endDateText = endDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
             document.getElementById('registrationEndDateText').textContent = endDateText;
@@ -318,6 +321,7 @@
                 submitRegistrationButton.disabled = false;
                 submitRegistrationButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
+             console.log("Registration Open:", registrationOpen); // Log registration status
         }
 
         // Client-Side Validation
