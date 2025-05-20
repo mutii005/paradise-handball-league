@@ -7,8 +7,8 @@
   <style>
     :root {
       --bg-dark: #141e30;
-      --text-dark: #d0e7e9; /* softer light color */
-      --accent: #40c4c4; /* softer turquoise */
+      --text-dark: #d0e7e9;
+      --accent: #40c4c4;
     }
     body {
       margin: 0;
@@ -27,44 +27,34 @@
     .container {
       max-width: 700px;
       padding: 30px;
-      background-color: rgba(255, 255, 255, 0.07); /* lighter but subtle */
+      background-color: rgba(255, 255, 255, 0.07);
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
     h1.typewriter {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 900;
       color: var(--accent);
       text-align: center;
       position: relative;
       display: inline-block;
-      white-space: pre-wrap;
+      white-space: normal;
       letter-spacing: 0.05em;
       user-select: none;
-      /* softer glow */
       text-shadow:
         0 0 3px var(--accent),
         0 0 8px var(--accent);
-    }
-    h1.typewriter::after {
-      content: "|";
-      display: inline-block;
-      margin-left: 5px;
-      color: var(--accent);
-      animation: blink 1s infinite;
-      font-weight: 900;
-      font-size: 3rem;
-      vertical-align: bottom;
-      opacity: 0.7; /* soften caret */
-    }
-    @keyframes blink {
-      0%, 50% { opacity: 0.7; }
-      51%, 100% { opacity: 0; }
+      max-width: 100%;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      hyphens: none;
+      margin: 0 auto 20px;
+      line-height: 1.2;
     }
     h1.typewriter span {
       opacity: 0;
       display: inline-block;
-      animation: fadeIn 0.05s forwards;
+      animation: fadeIn 0.07s forwards;
       animation-fill-mode: forwards;
     }
     @keyframes fadeIn {
@@ -95,7 +85,10 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="typewriter">Paradise Handball is Permanently Closed</h1>
+    <h1 class="typewriter">
+      Paradise Handball is<br />
+      Permanently Closed
+    </h1>
     <p>
       Thank you for visiting and supporting <strong>paradise-handball.site</strong>.<br />
       This project has now officially ended.
@@ -113,20 +106,28 @@
 
   <script>
     const heading = document.querySelector('h1.typewriter');
-    const text = heading.textContent;
-    heading.textContent = '';
+    const nodes = Array.from(heading.childNodes);
+    let charIndex = 0;
 
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      if (char === ' ') {
-        heading.appendChild(document.createTextNode(' '));
-      } else {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.style.animationDelay = (i * 0.07) + 's';
-        heading.appendChild(span);
+    // Wrap each character of all text nodes in spans with staggered animation delay
+    nodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent;
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          if (char === ' ') {
+            heading.insertBefore(document.createTextNode(' '), node);
+          } else {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.style.animationDelay = (charIndex * 0.07) + 's';
+            heading.insertBefore(span, node);
+          }
+          charIndex++;
+        }
+        heading.removeChild(node);
       }
-    }
+    });
   </script>
 </body>
 </html>
