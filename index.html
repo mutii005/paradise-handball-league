@@ -2,15 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Paradise Handball Site Closed</title>
   <style>
     :root {
       --bg-dark: #141e30;
-      --bg-light: #f0f0f0;
-      --text-dark: #ffffff;
-      --text-light: #1a1a1a;
-      --accent: #00ffff;
+      --text-dark: #d0e7e9; /* softer light color */
+      --accent: #40c4c4; /* softer turquoise */
     }
     body {
       margin: 0;
@@ -23,43 +21,67 @@
       align-items: center;
       min-height: 100vh;
       text-align: center;
-      transition: background 0.4s ease, color 0.4s ease;
       flex-direction: column;
+      padding: 20px;
     }
     .container {
       max-width: 700px;
       padding: 30px;
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: rgba(255, 255, 255, 0.07); /* lighter but subtle */
       border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+    h1.typewriter {
+      font-size: 3rem;
+      font-weight: 900;
       color: var(--accent);
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      white-space: pre-wrap;
+      letter-spacing: 0.05em;
+      user-select: none;
+      /* softer glow */
+      text-shadow:
+        0 0 3px var(--accent),
+        0 0 8px var(--accent);
     }
-    .typewriter {
-      overflow: hidden;
-      border-right: .15em solid var(--accent);
-      white-space: nowrap;
-      animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+    h1.typewriter::after {
+      content: "|";
+      display: inline-block;
+      margin-left: 5px;
+      color: var(--accent);
+      animation: blink 1s infinite;
+      font-weight: 900;
+      font-size: 3rem;
+      vertical-align: bottom;
+      opacity: 0.7; /* soften caret */
     }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+    @keyframes blink {
+      0%, 50% { opacity: 0.7; }
+      51%, 100% { opacity: 0; }
     }
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: var(--accent); }
+    h1.typewriter span {
+      opacity: 0;
+      display: inline-block;
+      animation: fadeIn 0.05s forwards;
+      animation-fill-mode: forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
     p {
       font-size: 1.1rem;
       line-height: 1.6;
       margin-bottom: 20px;
+      color: var(--text-dark);
     }
     .contact {
       margin-top: 30px;
       font-size: 0.95rem;
+      color: var(--text-dark);
     }
     .contact a {
       color: var(--accent);
@@ -69,51 +91,41 @@
     .contact a:hover {
       text-decoration: underline;
     }
-    .toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: var(--accent);
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
-  <button class="toggle" onclick="toggleTheme()">Switch Theme</button>
   <div class="container">
     <h1 class="typewriter">Paradise Handball is Permanently Closed</h1>
     <p>
-      Thank you for visiting and supporting <strong>paradise-handball.site</strong>.<br>
+      Thank you for visiting and supporting <strong>paradise-handball.site</strong>.<br />
       This project has now officially ended.
     </p>
     <p>
-      It was created and managed by <strong>Syed Mutaib</strong>, a passionate learner and developer.<br>
+      It was created and managed by <strong>Syed Mutaib</strong>, a passionate learner and developer.<br />
       While the site is no longer active, the journey of building and learning continues!
     </p>
     <div class="contact">
       <p>Stay connected:</p>
-      <a href="https://instagram.com/mutaib005" target="_blank">Instagram: @mutaib005</a> |
+      <a href="https://instagram.com/mutaib005" target="_blank" rel="noopener noreferrer">Instagram: @mutaib005</a> |
       <a href="mailto:syedmutaibnazir@gmail.com">Email: syedmutaibnazir@gmail.com</a>
     </div>
   </div>
 
   <script>
-    let isDark = true;
-    function toggleTheme() {
-      const root = document.documentElement;
-      if (isDark) {
-        root.style.setProperty('--bg-dark', '#f0f0f0');
-        root.style.setProperty('--text-dark', '#1a1a1a');
+    const heading = document.querySelector('h1.typewriter');
+    const text = heading.textContent;
+    heading.textContent = '';
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (char === ' ') {
+        heading.appendChild(document.createTextNode(' '));
       } else {
-        root.style.setProperty('--bg-dark', '#141e30');
-        root.style.setProperty('--text-dark', '#ffffff');
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.style.animationDelay = (i * 0.07) + 's';
+        heading.appendChild(span);
       }
-      isDark = !isDark;
     }
   </script>
 </body>
